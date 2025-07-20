@@ -20,8 +20,13 @@ function App() {
   };
 
   const deleteTodo = async (id) => {
-    await axios.delete(`http://localhost:8080/api/todos/${id}`);
-    fetchTodos();
+    try {
+      await axios.delete(`http://localhost:8080/api/todos/${id}`);
+      console.log("Deleting todo with id:", id);
+      fetchTodos();
+    } catch (error) {
+      console.error("Delete failed:", error.response?.data || error.message);
+    }
   };
 
   useEffect(() => {
@@ -40,8 +45,8 @@ function App() {
       <ul>
         {todos.map((todo) => (
           <li key={todo.id}>
-            {todo.title}
-            <button onClick={() => deleteTodo(todo.id)}>X</button>
+            {todo.title} (ID: {todo.id})
+            <button onClick={() => deleteTodo(todo.id)}>Delete</button>
           </li>
         ))}
       </ul>
