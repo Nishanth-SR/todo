@@ -31,8 +31,8 @@ public class TodoController {
     @PutMapping("/{id}")
     public Todo updateTodo(@PathVariable Long id, @RequestBody Todo updated) {
         Todo todo = todoRepository.findById(id).orElseThrow();
-        // todo.setTitle(updated.getTitle());
-        // todo.setCompleted(updated.isCompleted());
+        todo.setTitle(updated.getTitle());
+        todo.setCompleted(updated.isCompleted());
         return todoRepository.save(todo);
     }
 }

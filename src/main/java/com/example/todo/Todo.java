@@ -38,4 +38,8 @@ public class Todo {
     public void setCompleted(boolean completed) {
         this.completed = completed;
     }
+
+    public void setUpdatedTitle(String updatedTitle) {
+        this.title = updatedTitle;
+    }
 }

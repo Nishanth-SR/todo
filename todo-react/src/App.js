@@ -4,6 +4,7 @@ import axios from 'axios';
 function App() {
   const [todos, setTodos] = useState([]);
   const [title, setTitle] = useState("");
+  const [updatedTitle, setUpdatedTitle] = useState({});
 
   const fetchTodos = async () => {
     const response = await axios.get("http://localhost:8080/api/todos");
@@ -29,9 +30,25 @@ function App() {
     }
   };
 
+  const updateTodo = async (id) => {
+  try {
+    const updatedTitled = updatedTitle[id] || ""; // get the input value for this specific todo
+    if (!updatedTitled.trim()) {
+      alert("Title cannot be empty");
+      return;
+    }
+    await axios.put(`http://localhost:8080/api/todos/${id}`, { title: updatedTitled, completed: false });
+    console.log("Updating todo with id:", id);
+    fetchTodos();
+  } catch (error) {
+    console.error("Update failed:", error.response?.data || error.message);
+  }
+};
+
+
   useEffect(() => {
     fetchTodos();
-  }, []);
+  }, []); 
 
   return (
     <div style={{ padding: "20px" }}>
@@ -47,6 +64,12 @@ function App() {
           <li key={todo.id}>
             {todo.title} (ID: {todo.id})
             <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+            <input
+              value={updatedTitle[todo.id] || ""}
+              onChange={(e) => setUpdatedTitle({ ...updatedTitle, [todo.id]: e.target.value })}
+              placeholder="Update todo"
+            />
+            <button onClick={() => updateTodo(todo.id)}>Update</button>
           </li>
         ))}
       </ul>
